@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "JPWebViewController.h"
 #import "JPLabel.h"
 
 @interface ViewController ()
@@ -20,7 +21,7 @@
 
     [super viewDidLoad];
    
-    self.textLabel.text = @"#JPLabel# 用于匹配字符串的内容显示, 用户:@盼盼, 包括话题:#怎么追漂亮女孩?#, 链接:https://github.com/coderwhy/HYLabel, 协议:《退款政策》";
+    self.textLabel.text = @"#JPLabel# 用于匹配字符串的内容显示, 用户:@盼盼, 包括话题:#怎么追漂亮女孩?#, 链接:https://github.com/Chris-Pan/JPLabel, 协议:《退款政策》";
     
     // 非匹配内容文字颜色
     self.textLabel.jp_commonTextColor = [UIColor colorWithRed:112.0/255 green:93.0/255 blue:77.0/255 alpha:1];
@@ -38,6 +39,12 @@
     self.textLabel.jp_tapOperation = ^(UILabel *label, HandleStyle style, NSString *selectedString, NSRange range){
         
         NSLog(@"%@", selectedString);
+        
+        if (style == HandleStyleLink) {
+            JPWebViewController *web = [JPWebViewController new];
+            web.URLString = selectedString;
+            [self.navigationController pushViewController:web animated:YES];
+        }
     };
 }
 

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F0148D11D79EC7500AA625F /* JPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0148CF1D79EC7500AA625F /* JPWebViewController.m */; };
+		5F0148D21D79EC7500AA625F /* JPWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5F0148D01D79EC7500AA625F /* JPWebViewController.xib */; };
 		5F70CB001D7935A100B3D0C9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F70CAFF1D7935A100B3D0C9 /* main.m */; };
 		5F70CB031D7935A100B3D0C9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F70CB021D7935A100B3D0C9 /* AppDelegate.m */; };
 		5F70CB061D7935A100B3D0C9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F70CB051D7935A100B3D0C9 /* ViewController.m */; };
@@ -36,6 +38,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5F0148CE1D79EC7500AA625F /* JPWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPWebViewController.h; sourceTree = "<group>"; };
+		5F0148CF1D79EC7500AA625F /* JPWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPWebViewController.m; sourceTree = "<group>"; };
+		5F0148D01D79EC7500AA625F /* JPWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JPWebViewController.xib; sourceTree = "<group>"; };
 		5F70CAFB1D7935A100B3D0C9 /* JPLabel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JPLabel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F70CAFF1D7935A100B3D0C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5F70CB011D7935A100B3D0C9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -109,6 +114,9 @@
 				5F70CB021D7935A100B3D0C9 /* AppDelegate.m */,
 				5F70CB041D7935A100B3D0C9 /* ViewController.h */,
 				5F70CB051D7935A100B3D0C9 /* ViewController.m */,
+				5F0148CE1D79EC7500AA625F /* JPWebViewController.h */,
+				5F0148CF1D79EC7500AA625F /* JPWebViewController.m */,
+				5F0148D01D79EC7500AA625F /* JPWebViewController.xib */,
 				5F70CB071D7935A100B3D0C9 /* Main.storyboard */,
 				5F70CB0A1D7935A100B3D0C9 /* Assets.xcassets */,
 				5F70CB0C1D7935A100B3D0C9 /* LaunchScreen.storyboard */,
@@ -262,6 +270,7 @@
 				5F70CB0E1D7935A100B3D0C9 /* LaunchScreen.storyboard in Resources */,
 				5F70CB0B1D7935A100B3D0C9 /* Assets.xcassets in Resources */,
 				5F70CB091D7935A100B3D0C9 /* Main.storyboard in Resources */,
+				5F0148D21D79EC7500AA625F /* JPWebViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +298,7 @@
 				5F70CB061D7935A100B3D0C9 /* ViewController.m in Sources */,
 				5F70CB031D7935A100B3D0C9 /* AppDelegate.m in Sources */,
 				5F70CB341D7935D000B3D0C9 /* JPLabel.m in Sources */,
+				5F0148D11D79EC7500AA625F /* JPWebViewController.m in Sources */,
 				5F70CB001D7935A100B3D0C9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +523,7 @@
 				5F70CB2A1D7935A100B3D0C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5F70CB2B1D7935A100B3D0C9 /* Build configuration list for PBXNativeTarget "JPLabelTests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +532,7 @@
 				5F70CB2D1D7935A100B3D0C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5F70CB2E1D7935A100B3D0C9 /* Build configuration list for PBXNativeTarget "JPLabelUITests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +541,7 @@
 				5F70CB301D7935A100B3D0C9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
