@@ -60,7 +60,6 @@
 #pragma mark --------------------------------------------------
 #pragma mark Publish
 
-
 -(void)setHightLightTextColor:(UIColor *)hightLightColor forHandleStyle:(HandleStyle)handleStyle{
     switch (handleStyle) {
         case HandleStyleLink:
@@ -140,14 +139,19 @@
     _textContainer = [NSTextContainer new];
     _jp_commonTextColor = [UIColor colorWithRed:162.0/255 green:162.0/255  blue:162.0/255  alpha:162.0/255];
     _jp_textHightLightBackgroundColor = [UIColor colorWithWhite:0.7 alpha:0.2];
-    _linkHightColor = self.topicHightColor = self.agreementHightColor = self.userHightColor = [UIColor colorWithRed:64.0/255 green:64.0/255 blue:64.0/255 alpha:1];
+    _linkHightColor = _topicHightColor = _agreementHightColor = _userHightColor = [UIColor colorWithRed:64.0/255 green:64.0/255 blue:64.0/255 alpha:1];
     
     [self prepareTextSystem];
 }
 
+
+#pragma mark --------------------------------------------------
+#pragma mark 系统回调
+
 // 布局子控件
 -(void)layoutSubviews{
     [super layoutSubviews];
+    
     // 设置容器的大小为Label的尺寸
     self.textContainer.size = self.frame.size;
 }
@@ -216,11 +220,14 @@
         attrString = [[NSAttributedString alloc]initWithString:@""];
     }
     
+    if (attrString.length == 0) return;
+    
     self.selectedRange = NSMakeRange(0, 0);
     
     // 2.设置换行模型
     NSMutableAttributedString *attrStringM = [self addLineBreak:attrString];
 
+    // 3.给文本添加显示字号和颜色
     NSDictionary *attr;
     attr = @{
              NSFontAttributeName : self.font,
@@ -229,10 +236,10 @@
 
     [attrStringM setAttributes:attr range:NSMakeRange(0, attrStringM.length)];
     
-    // 3.设置textStorage的内容
+    // 4.设置textStorage的内容
     [self.textStorage setAttributedString:attrStringM];
     
-    // 4.匹配URL
+    // 5.匹配URL
     NSArray *linkRanges = [self getLinkRanges];
     self.linkRangesArr = linkRanges;
     for (NSValue *value in linkRanges) {
@@ -241,7 +248,7 @@
         [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.linkHightColor range:range];
     }
     
-    // 5.匹配@用户
+    // 6.匹配@用户
     NSArray *userRanges = [self getRanges:@"@[\\u4e00-\\u9fa5a-zA-Z0-9_-]*"];
     self.userRangesArr = userRanges;
     for (NSValue *value in userRanges) {
@@ -250,7 +257,7 @@
         [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.userHightColor range:range];
     }
     
-    // 6.匹配话题##
+    // 7.匹配话题##
     NSArray *topicRanges = [self getRanges:@"#.*?#"];
     self.topicRangesArr = topicRanges;
     for (NSValue *value in topicRanges) {
@@ -259,7 +266,7 @@
         [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.topicHightColor range:range];
     }
     
-    // 匹配协议/政策 << >>
+    // 8.匹配协议/政策 << >>
     NSArray *agreementRanges = [self getRanges:@"《([^》]*)》"];
     self.agreementRangesArr = agreementRanges;
     for (NSValue *value in agreementRanges) {
@@ -268,6 +275,7 @@
         [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.agreementHightColor range:range];
     }
     
+    // 9.更新显示，重新绘制
     [self setNeedsDisplay];
 }
 
