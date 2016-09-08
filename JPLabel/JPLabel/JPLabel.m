@@ -52,9 +52,14 @@
 /** 协议/政策范围 */
 @property(nonatomic, strong)NSArray *agreementRangesArr;
 
+/** 自定义要查找的范围 */
+@property(nonatomic, strong)NSArray *userDefineRangesArr;
+
 @end
 
 
+static NSString *JPRange = @"jprange";
+static NSString *JPColor = @"jpcolor";
 @implementation JPLabel
 
 #pragma mark --------------------------------------------------
@@ -94,6 +99,11 @@
 
 -(void)setJp_commonTextColor:(UIColor *)jp_commonTextColor{
     _jp_commonTextColor = jp_commonTextColor;
+    [self prepareText];
+}
+
+-(void)setJp_matchArr:(NSArray<NSDictionary *> *)jp_matchArr{
+    _jp_matchArr = jp_matchArr;
     [self prepareText];
 }
 
@@ -275,7 +285,25 @@
         [self.textStorage addAttribute:NSForegroundColorAttributeName value:self.agreementHightColor range:range];
     }
     
-    // 9.更新显示，重新绘制
+    // 9.匹配用户自定义的字符串
+    if (self.jp_matchArr.count > 0) {
+        NSArray<NSDictionary *> *userDefineRangeDicts = [self getUserDefineStringsRange];
+        if (userDefineRangeDicts.count > 0) {
+            NSMutableArray *arrM = [NSMutableArray array];
+            for (NSDictionary *dict in userDefineRangeDicts) {
+                NSValue *value = dict[JPRange];
+                [arrM addObject:value];
+                UIColor *color = dict[JPColor];
+                NSRange range;
+                [value getValue:&range];
+                [self.textStorage addAttribute:NSForegroundColorAttributeName value:color range:range];
+            }
+            self.userDefineRangesArr = [arrM copy];
+        }
+        
+    }
+    
+    // 10.更新显示，重新绘制
     [self setNeedsDisplay];
 }
 
@@ -323,7 +351,9 @@
             if (self.jp_tapOperation) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (!strongSelf) return;
-                self.jp_tapOperation(strongSelf, HandleStyleAgreement, selectedString, strongSelf.selectedRange);
+                if (strongSelf.jp_tapOperation) {
+                    strongSelf.jp_tapOperation(strongSelf, HandleStyleAgreement, selectedString, strongSelf.selectedRange);
+                }
             }
         }
             break;
@@ -332,7 +362,9 @@
             if (self.jp_tapOperation) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (!strongSelf) return;
-                self.jp_tapOperation(strongSelf, HandleStyleLink, selectedString, strongSelf.selectedRange);
+                if (strongSelf.jp_tapOperation) {
+                    strongSelf.jp_tapOperation(strongSelf, HandleStyleLink, selectedString, strongSelf.selectedRange);
+                }
             }
         }
             break;
@@ -341,7 +373,9 @@
             if (self.jp_tapOperation) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (!strongSelf) return;
-                self.jp_tapOperation(strongSelf, HandleStyleTopic, selectedString, strongSelf.selectedRange);
+                if (strongSelf.jp_tapOperation) {
+                    strongSelf.jp_tapOperation(strongSelf, HandleStyleTopic, selectedString, strongSelf.selectedRange);
+                }
             }
         }
             break;
@@ -350,13 +384,31 @@
             if (self.jp_tapOperation) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 if (!strongSelf) return;
-                self.jp_tapOperation(strongSelf, HandleStyleUser, selectedString, strongSelf.selectedRange);
+                if (strongSelf.jp_tapOperation) {
+                    strongSelf.jp_tapOperation(strongSelf, HandleStyleUser, selectedString, strongSelf.selectedRange);
+                }
+            }
+        }
+            break;
+        case HandleStyleUserDefine:{
+            __weak typeof(self) weakSelf = self;
+            if (self.jp_tapOperation) {
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf) return;
+                if (strongSelf.jp_tapOperation) {
+                    strongSelf.jp_tapOperation(strongSelf, HandleStyleUserDefine, selectedString, strongSelf.selectedRange);
+                }
             }
         }
             break;
             
         default:
             break;
+    }
+    
+    // 4.代理
+    if ([self.delegate respondsToSelector:@selector(jp_label:didSelectedString:forStyle:inRange:)]) {
+        [self.delegate jp_label:self didSelectedString:selectedString forStyle:self.tapStyle inRange:self.selectedRange];
     }
     
 }
@@ -413,12 +465,52 @@
         }
     }
     
+    // 2.5.判断是否是一个用户自定义要匹配的字符串
+    for (NSValue *value in self.userDefineRangesArr) {
+        NSRange range;
+        [value getValue:&range];
+        if (index > range.location && index < range.location + range.length) {
+            [self setNeedsDisplay];
+            self.tapStyle = HandleStyleUserDefine;
+            return range;
+        }
+    }
+    
     return NSMakeRange(0, 0);
 }
 
 
 #pragma mark --------------------------------------------------
 #pragma mark 字符串匹配封装
+
+// 查找用户给定的字符串的range
+-(NSArray<NSDictionary*> *)getUserDefineStringsRange{
+    
+    if (self.jp_matchArr.count == 0) return nil;
+    
+    NSMutableArray<NSDictionary*> *arrM = [NSMutableArray array];
+    
+    NSString *str = [self.textStorage string];
+    for (NSDictionary *dict in self.jp_matchArr) {
+        NSString *subStr = dict[@"string"];
+        UIColor *color = dict[@"color"];
+        // 没传入字符串
+        if (!subStr) return nil;
+        
+        NSRange range = [str rangeOfString:subStr];
+        
+        // 没找到
+        if (range.length == 0) continue;
+        
+        NSValue *value = [NSValue valueWithBytes:&range objCType:@encode(NSRange)];
+        NSMutableDictionary *aDictM = [NSMutableDictionary dictionary];
+        aDictM[JPRange] = value;
+        aDictM[JPColor] = color;
+        [arrM addObject:[aDictM copy]];
+    }
+    
+    return [arrM copy];
+}
 
 -(NSArray *)getRanges:(NSString *)pattern{
     
