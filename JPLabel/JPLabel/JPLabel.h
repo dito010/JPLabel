@@ -21,6 +21,8 @@ typedef NS_ENUM(NSUInteger, HandleStyle) {
 
 @protocol JPLabelDelegate <NSObject>
 
+@optional
+
 -(void)jp_label:(JPLabel *)label didSelectedString:(NSString *)selectedStr forStyle:(HandleStyle)style inRange:(NSRange)range;
 
 @end
